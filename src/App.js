@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Container from "@material-ui/core/Container";
 import {createMuiTheme, makeStyles, ThemeProvider} from '@material-ui/core/styles';
@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import {setState} from "expect";
 
 const getData = () => {
 	return (
@@ -25,6 +26,36 @@ const getData = () => {
 			{
 				imageSrc: "react.svg",
 				title: "Beetlejuice to be remastered with granite and rubber gloves",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "Lets talk about Singletons",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "How did we end up here",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "Are you also on a chocolate diet?",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "Coffee is nothing but fuel for the brain",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "Boxing to introduce gloves made out of concrete",
+				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
+			},
+			{
+				imageSrc: "react.svg",
+				title: "Find Waldo.",
 				content: "Truncation should be conditionally applicable on this long line of text as this is a much longer line than what the container can support."
 			},
 		]
@@ -46,7 +77,19 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
+const handleUserInput = (event) => {
+	const test = () => {
+		let timer;
+	};
+
+	clearTimeout(test().timer);
+		// TODO: Delay with setTimeout() and clearTimeout()
+		// TODO: Fetch results from mock data
+		console.log(e.currentTarget.value);
+};
+
 const Spotlight = () => {
+	const [results] = useState(getData());
 	const darkMode = useMediaQuery('(prefers-color-scheme: dark)');
 	const theme = React.useMemo(
 		() =>
@@ -67,6 +110,7 @@ const Spotlight = () => {
 			<Container maxWidth="sm">
 				<TextField
 					placeholder="What are you looking for?"
+					onChange={handleUserInput}
 					fullWidth
 					margin="normal"
 					InputLabelProps={{
@@ -78,7 +122,7 @@ const Spotlight = () => {
 					color="secondary"
 					theme={theme}
 				/>
-				<Results/>
+				<Results results={results}/>
 			</Container>
 			<CssBaseline/>
 		</ThemeProvider>
@@ -104,16 +148,16 @@ const ResultItem = (props) => {
 	)
 };
 
-const Results = () => {
+const Results = (props) => {
 	return (
 		<Grid container direction="column" justify="flex-start" alignItems="stretch">
 			{
-				Object.keys(getData()).map((i) => {
+				Object.keys(props.results).map((i) => {
 					return (
 						<ResultItem
-							title={getData()[i].title}
-							imageSrc={getData()[i].imageSrc}
-							content={getData()[i].content}
+							title={props.results[i].title}
+							imageSrc={props.results[i].imageSrc}
+							content={props.results[i].content}
 						/>
 					)
 				})
