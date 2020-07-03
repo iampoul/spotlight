@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
-import {setState} from "expect";
 
 const getData = () => {
 	return (
@@ -77,18 +76,9 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const handleUserInput = (event) => {
-	const test = () => {
-		let timer;
-	};
-
-	clearTimeout(test().timer);
-		// TODO: Delay with setTimeout() and clearTimeout()
-		// TODO: Fetch results from mock data
-		console.log(e.currentTarget.value);
-};
-
 const Spotlight = () => {
+	let delayTimer = null;
+	const searchDelay = 2000;
 	const [results] = useState(getData());
 	const darkMode = useMediaQuery('(prefers-color-scheme: dark)');
 	const theme = React.useMemo(
@@ -105,12 +95,24 @@ const Spotlight = () => {
 			}),
 		[darkMode],
 	);
+
+	const handleChange = (event) => {
+		const inputValue = event.currentTarget.value;
+		clearTimeout(delayTimer);
+		delayTimer = setTimeout(() => {
+			if(inputValue) {
+				//TODO Call some endpoint and filter the results rather than using the mock data
+				console.log(inputValue);
+			}
+		}, searchDelay);
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Container maxWidth="sm">
 				<TextField
 					placeholder="What are you looking for?"
-					onChange={handleUserInput}
+					onChange={handleChange}
 					fullWidth
 					margin="normal"
 					InputLabelProps={{
@@ -155,6 +157,7 @@ const Results = (props) => {
 				Object.keys(props.results).map((i) => {
 					return (
 						<ResultItem
+							key={i}
 							title={props.results[i].title}
 							imageSrc={props.results[i].imageSrc}
 							content={props.results[i].content}
