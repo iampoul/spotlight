@@ -8,8 +8,9 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import _ from "lodash";
 
-const getData = () => {
+const getData = (searchString) => {
 	return (
 		[
 			{
@@ -78,8 +79,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Spotlight = () => {
 	let delayTimer = null;
-	const searchDelay = 2000;
-	const [results] = useState(getData());
+	const searchDelay = 500;
+	const [results, setResults] = useState([]);
 	const darkMode = useMediaQuery('(prefers-color-scheme: dark)');
 	const theme = React.useMemo(
 		() =>
@@ -97,14 +98,20 @@ const Spotlight = () => {
 	);
 
 	const handleChange = (event) => {
-		const inputValue = event.currentTarget.value;
-		clearTimeout(delayTimer);
-		delayTimer = setTimeout(() => {
-			if(inputValue) {
-				//TODO Call some endpoint and filter the results rather than using the mock data
-				console.log(inputValue);
-			}
-		}, searchDelay);
+		const inputValue = _.toLower(event.currentTarget.value);
+		if(inputValue.length === 0)
+		{
+			setResults([]);
+		}
+		else
+		{
+			clearTimeout(delayTimer);
+			delayTimer = setTimeout(() => {
+				if(inputValue) {
+					setResults(getData(inputValue));
+				}
+			}, searchDelay);
+		}
 	};
 
 	return (
@@ -124,7 +131,7 @@ const Spotlight = () => {
 					color="secondary"
 					theme={theme}
 				/>
-				<Results results={results}/>
+				<Results results={results} />
 			</Container>
 			<CssBaseline/>
 		</ThemeProvider>
